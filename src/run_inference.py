@@ -21,13 +21,6 @@ from transformers import (
     pipeline,
 )
 
-from config.load_models import (
-    load_quantized_model_awq,
-    load_quantized_model_gguf_ggml,
-    load_quantized_model_qptq,
-    load_full_model,
-)
-
 from config.constants import (
     EMBEDDING_MODEL_NAME,
     PERSIST_DIRECTORY,
@@ -37,6 +30,13 @@ from config.constants import (
     MODELS_PATH,
     CHROMA_SETTINGS
 )
+from config.load_models import (
+    load_quantized_model_awq,
+    load_quantized_model_gguf_ggml,
+    load_quantized_model_qptq,
+    load_full_model,
+)
+
 
 
 def load_model(device_type, model_id, model_basename=None, LOGGING=logging):
