@@ -48,4 +48,4 @@ def predict(message, history):
             yield partial_message
 
 
-gr.ChatInterface(predict).queue().launch()
+gr.ChatInterface(predict).queue().launch(share=True)
