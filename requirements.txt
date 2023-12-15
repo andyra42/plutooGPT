@@ -1,11 +1,39 @@
-# This files originate from the "New-Empty-Python-Project-Base" template:
-#     https://github.com/Neuraxio/New-Empty-Python-Project-Base
-# Created by Guillaume Chevalier at Neuraxio:
-#     https://github.com/Neuraxio
-#     https://github.com/guillaume-chevalier
-# License: CC0-1.0 (Public Domain)
 
 setuptools
 pytest==4.3.1
 pytest-cov==2.6.1
-neuraxle
+
+# Natural Language Processing
+langchain==0.0.267
+chromadb==0.4.6
+pdfminer.six==20221105
+InstructorEmbedding
+sentence-transformers
+faiss-cpu
+huggingface_hub
+transformers
+autoawq
+protobuf==3.20.2; sys_platform != 'darwin'
+protobuf==3.20.2; sys_platform == 'darwin' and platform_machine != 'arm64'
+protobuf==3.20.3; sys_platform == 'darwin' and platform_machine == 'arm64'
+auto-gptq==0.2.2
+docx2txt
+unstructured
+unstructured[pdf]
+
+# Utilities
+urllib3==1.26.6
+accelerate
+bitsandbytes ; sys_platform != 'win32'
+bitsandbytes-windows ; sys_platform == 'win32'
+click
+flask
+requests
+
+# Streamlit related
+streamlit
+Streamlit-extras
+
+# Excel File Manipulation
+openpyxl
+

@@ -7,6 +7,6 @@ Created by Guillaume Chevalier at Neuraxio:
 License: CC0-1.0 (Public Domain)
 """
 
+
 def hello_world():
     return "Hello World!"
-
