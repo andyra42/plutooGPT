@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 # from dotenv import load_dotenv
 from chromadb.config import Settings
@@ -9,10 +10,10 @@ from langchain.document_loaders import UnstructuredFileLoader, UnstructuredMarkd
 
 
 # load_dotenv()
-ROOT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
+ROOT_DIRECTORY = Path(os.path.dirname(os.path.realpath(__file__))).parent.parent.absolute()
 
 # Define the folder for storing database
-SOURCE_DIRECTORY = f"{ROOT_DIRECTORY}/SOURCE_DOCUMENTS"
+SOURCE_DIRECTORY = f"{ROOT_DIRECTORY}/data/pdf"
 
 PERSIST_DIRECTORY = f"{ROOT_DIRECTORY}/DB"
 
