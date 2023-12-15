@@ -3,7 +3,6 @@ import logging
 import click
 import torch
 import util
-import config
 from langchain.chains import RetrievalQA
 from langchain.embeddings import HuggingFaceInstructEmbeddings
 from langchain.llms import HuggingFacePipeline
@@ -20,7 +19,7 @@ from transformers import (
     GenerationConfig,
     pipeline,
 )
-from config.load_models import (
+from load_models import (
     load_quantized_model_awq,
     load_quantized_model_gguf_ggml,
     load_quantized_model_qptq,
