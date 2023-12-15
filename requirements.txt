@@ -36,4 +36,5 @@ Streamlit-extras
 
 # Excel File Manipulation
 openpyxl
+gradio
 
