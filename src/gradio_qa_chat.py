@@ -224,7 +224,7 @@ def get_responses(question, device_type, use_history, model_type):
     return answer, docs
 
 
-def main(device_type, show_sources, use_history, model_type, save_qa):
+def main(device_type="cuda", show_sources=True, use_history=False, model_type="llama", save_qa=False):
     """
         Implements the main information retrieval task for a localGPT.
 
