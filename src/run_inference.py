@@ -214,7 +214,7 @@ def retrieval_qa_pipline(device_type, use_history, promptTemplate_type="llama"):
     is_flag=True,
     help="whether to save Q&A pairs to a CSV file (Default is False)",
 )
-def main(device_type, show_sources, use_history, model_type, save_qa):
+def main(device_type="cuda", show_sources=True, use_history=False, model_type="llama", save_qa=False):
     """
     Implements the main information retrieval task for a localGPT.
 
