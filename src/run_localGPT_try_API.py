@@ -1,4 +1,4 @@
-#run_localGPT_API.py
+# run_localGPT_API.py
 import logging
 import torch
 from auto_gptq import AutoGPTQForCausalLM
@@ -20,12 +20,12 @@ from transformers import (
     pipeline,
 )
 
-from constants import CHROMA_SETTINGS, EMBEDDING_MODEL_NAME, PERSIST_DIRECTORY, MODEL_ID, MODEL_BASENAME
+from config.constants import CHROMA_SETTINGS, EMBEDDING_MODEL_NAME, PERSIST_DIRECTORY, MODEL_ID, MODEL_BASENAME
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 import argparse
-from flask import Flask, request, jsonify # Run "pip install flask"
+from flask import Flask, request, jsonify  # Run "pip install flask"
 import requests
 import json
 
@@ -34,13 +34,16 @@ server_error_msg = "**NETWORK ERROR DUE TO HIGH TRAFFIC. PLEASE REGENERATE OR RE
 
 g_model_id = g_model_basename = g_webui_port = g_serving_port = g_model_type = ""
 
-LOCALLLMSDAT="localLLMS.dat"
+LOCALLLMSDAT = "localLLMS.dat"
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def post_process_answer(answer, sourceDocs):
     output = []
     for document in sourceDocs:
-        output.append("<b>Source</b>: {}<br><b>Content</b><pre>{}</pre>".format(document.metadata["source"], "<br>".join(document.page_content.split("\n"))))
+        output.append("<b>Source</b>: {}<br><b>Content</b><pre>{}</pre>".format(document.metadata["source"],
+                                                                                "<br>".join(
+                                                                                    document.page_content.split("\n"))))
 
     answer += f"<br><br>{output}"
     answer = answer.rstrip("\n")
@@ -49,6 +52,7 @@ def post_process_answer(answer, sourceDocs):
     answer = answer.replace(" <br><br>", " ")
     answer = answer.replace(" <BR><BR>", " ")
     return answer
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -118,7 +122,7 @@ def load_model(device_type, model_id, model_basename=None):
                 quantize_config=None,
             )
     elif (
-        device_type.lower() == "cuda"
+            device_type.lower() == "cuda"
     ):  # The code supports all huggingface models that ends with -HF or which have a .bin
         # file in their HF repo.
         logging.info("Using AutoModelForCausalLM for full models")
@@ -161,8 +165,11 @@ def load_model(device_type, model_id, model_basename=None):
     logging.info("Local LLM Loaded")
 
     return local_llm
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-LOCALLLMSDAT="localLLMS.dat"
+LOCALLLMSDAT = "localLLMS.dat"
+
 
 def print_header():
     print("........................................................................")
@@ -171,19 +178,23 @@ def print_header():
     print("Please choose the SEQ# of the model to serve and the device type and we will be on our way")
     print("...")
 
+
 def print_table():
     with open(LOCALLLMSDAT, 'r') as file:
         content = file.read().rstrip()
         print(content, end='')
+
 
 def validate_seq(value):
     while value < 1 or value > 13:
         value = int(input('Please enter a valid SEQ#..Range[1-13]: '))
     return value
 
+
 print_header()
 print_table()
 print("\n........................................................................")
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -194,6 +205,7 @@ def get_seq():
     except ValueError:
         print("Invalid input. Please enter an integer.")
         return get_seq()
+
 
 def get_device_type():
     available_device_types = [
@@ -208,6 +220,7 @@ def get_device_type():
     else:
         print("Invalid device type. Please try again.")
         return get_device_type()
+
 
 parser = argparse.ArgumentParser(description='Model serving options.')
 parser.add_argument('--seq', type=int, help='The sequence number to select the model.')
@@ -233,25 +246,27 @@ print("..................................................")
 print(f"Model REST API Server Running on: {device_type}")
 print("..................................................")
 
+
 def getModelDesignInfo(seq):
     with open(LOCALLLMSDAT, 'r') as file:
         lines = file.readlines()
         for line in lines[3:]:  # Skip the header
             columns = line.strip().split('|')
             if int(columns[0]) == seq:
-                #g_webui_port = columns[1]
-                #g_serving_port = columns[2]
-                #g_model_type = columns[3]
-                #g_model_id = columns[4]
-                #g_model_basename = columns[5]
-                #print(f"Selected SEQ#: {seq}")
-                #print(f"WEBUI PORT: {g_webui_port}")
-                #print(f"SERVING PORT: {g_serving_port}")
-                #print(f"MODEL TYPE: {g_model_type}")
-                #print(f"MODEL ID: {g_model_id}")
-                #print(f"MODEL BASENAME: {g_model_basename}")
+                # g_webui_port = columns[1]
+                # g_serving_port = columns[2]
+                # g_model_type = columns[3]
+                # g_model_id = columns[4]
+                # g_model_basename = columns[5]
+                # print(f"Selected SEQ#: {seq}")
+                # print(f"WEBUI PORT: {g_webui_port}")
+                # print(f"SERVING PORT: {g_serving_port}")
+                # print(f"MODEL TYPE: {g_model_type}")
+                # print(f"MODEL ID: {g_model_id}")
+                # print(f"MODEL BASENAME: {g_model_basename}")
                 break
-    return columns[1], columns[2], columns[3],  columns[4], columns[5]
+    return columns[1], columns[2], columns[3], columns[4], columns[5]
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
@@ -265,7 +280,7 @@ This is the main block of code that implements the information retrieval task.
 """
 
 logging.info(f"Running on: {device_type}")
-#logging.info(f"Display Source Documents set to: {show_sources}")
+# logging.info(f"Display Source Documents set to: {show_sources}")
 
 embeddings = HuggingFaceInstructEmbeddings(model_name=EMBEDDING_MODEL_NAME, model_kwargs={"device": device_type})
 
@@ -296,9 +311,10 @@ g_webui_port, g_serving_port, g_model_type, g_model_id, g_model_basename = getMo
 
 print(f"model_basename: {g_model_basename}")
 
-#llm = load_model(device_type, model_id=MODEL_ID, model_basename=MODEL_BASENAME)
-#llm = load_model(device_type, model_id=g_model_id, model_basename=g_model_basename)
-llm = load_model(device_type, model_id=g_model_id, model_basename=None if g_model_basename in ("n/a", "") else g_model_basename)
+# llm = load_model(device_type, model_id=MODEL_ID, model_basename=MODEL_BASENAME)
+# llm = load_model(device_type, model_id=g_model_id, model_basename=g_model_basename)
+llm = load_model(device_type, model_id=g_model_id,
+                 model_basename=None if g_model_basename in ("n/a", "") else g_model_basename)
 
 qa = RetrievalQA.from_chain_type(
     llm=llm,
@@ -313,6 +329,7 @@ qa = RetrievalQA.from_chain_type(
 # Create a Flask app
 app = Flask(__name__)
 
+
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
@@ -326,7 +343,7 @@ def predict():
 
         # Get the answer from the chain
         prompt = system_content + f"\n Question: {question}"
-        res = qa(prompt)    
+        res = qa(prompt)
         answer, docs = res['result'], res['source_documents']
 
         print(f"in /predict; answer: ")
@@ -336,7 +353,7 @@ def predict():
         history.append(question)
         history.append(answer)
         chatbot = [(history[i], history[i + 1]) for i in range(0, len(history), 2)]
-        
+
         response = jsonify({"chatbot": chatbot, "history": history})
 
         # Set the headers
@@ -355,14 +372,18 @@ def predict():
         answer = server_error_msg + f" (error_code: {server_error_code})"
         history.append(answer)
         chatbot = [(history[i], history[i + 1]) for i in range(0, len(history), 2)]
-        #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         response = jsonify({"chatbot": chatbot, "history": history})
-        return jsonify({"chatbot": chatbot, "history": history}), server_error_code, {"Access-Control-Allow-Origin": "*"}    
+        return jsonify({"chatbot": chatbot, "history": history}), server_error_code, {
+            "Access-Control-Allow-Origin": "*"}
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 def main(seq, device_type):
-    #app.run()
+    # app.run()
     app.run(host='0.0.0.0', port=g_serving_port)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if __name__ == "__main__":
