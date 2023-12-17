@@ -1,0 +1,16 @@
+........................................................................
+SEQ#|WEBUI_PORT|SERVING_PORT|MODEL_TYPE|MODEL_ID|MODEL_BASENAME|REQ
+........................................................................
+1|10001|20001|HF|TheBloke/vicuna-7B-1.1-HF|n/a|None
+2|10002|20002|HF|TheBloke/Wizard-Vicuna-7B-Uncensored-HF|n/a|None
+3|10003|20003|HF|TheBloke/guanaco-7B-HF|n/a|None
+4|10004|20004|HF|NousResearch/Nous-Hermes-13b|n/a|23GB
+5|10005|20005|GPTQ|TheBloke/Nous-Hermes-13B-GPTQ|nous-hermes-13b-GPTQ-4bit-128g.no-act.order|None
+6|10006|20006|GPTQ|TheBloke/WizardLM-30B-Uncensored-GPTQ|WizardLM-30B-Uncensored-GPTQ-4bit.act-order.safetensors|21GB
+7|10007|20007|GPTQ|TheBloke/wizardLM-7B-GPTQ|wizardLM-7B-GPTQ-4bit.compat.no-act-order.safetensors|None
+8|10008|20008|GPTQ|TheBloke/WizardLM-7B-uncensored-GPTQ|WizardLM-7B-uncensored-GPTQ-4bit-128g.compat.no-act-order.safetensors|None
+9|10009|20009|GGML|TheBloke/wizard-vicuna-13B-GGML|wizard-vicuna-13B.ggmlv3.q4_0.bin|None
+10|10010|20010|GGML|TheBloke/wizard-vicuna-13B-GGML|wizard-vicuna-13B.ggmlv3.q6_K.bin|None
+11|10011|20011|GGML|TheBloke/wizard-vicuna-13B-GGML|wizard-vicuna-13B.ggmlv3.q2_K.bin|None
+12|10012|20012|GGML|TheBloke/orca_mini_3B-GGML|orca-mini-3b.ggmlv3.q4_0.bin|None
+13|10013|20013|GGML|TheBloke/Llama-2-7B-Chat-GGML|llama-2-7b-chat.ggmlv3.q4_0.bin|None
