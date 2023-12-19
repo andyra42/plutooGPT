@@ -37,6 +37,17 @@ from config.constants import (
     CHROMA_SETTINGS
 )
 
+if torch.backends.mps.is_available():
+    DEVICE_TYPE = "mps"
+elif torch.cuda.is_available():
+    DEVICE_TYPE = "cuda"
+else:
+    DEVICE_TYPE = "cpu"
+
+SHOW_SOURCES = True
+logging.info(f"Running on: {DEVICE_TYPE}")
+logging.info(f"Display Source Documents set to: {SHOW_SOURCES}")
+
 
 def load_model(device_type, model_id, model_basename=None, LOGGING=logging):
     """
@@ -94,6 +105,9 @@ def load_model(device_type, model_id, model_basename=None, LOGGING=logging):
     logging.info("Local LLM Loaded")
 
     return local_llm
+
+
+LLM = load_model(device_type=DEVICE_TYPE, model_id=MODEL_ID, model_basename=MODEL_BASENAME)
 
 
 def add_text(history, text):
@@ -174,6 +188,9 @@ def retrieval_qa_pipline(device_type, use_history, promptTemplate_type="llama"):
     return qa
 
 
+QA = retrieval_qa_pipline(DEVICE_TYPE, SHOW_SOURCES, promptTemplate_type=LLM)
+
+
 # chose device typ to run on as well as to show source documents.
 @click.command()
 @click.option(
@@ -230,9 +247,9 @@ def retrieval_qa_pipline(device_type, use_history, promptTemplate_type="llama"):
     help="whether to save Q&A pairs to a CSV file (Default is False)",
 )
 def get_responses(question, device_type, use_history, model_type):
-    qa = retrieval_qa_pipline(device_type, use_history, promptTemplate_type=model_type)
+    # qa = retrieval_qa_pipline(device_type, use_history, promptTemplate_type=model_type)
 
-    res = qa(question)
+    res = QA(question)
     answer, docs = res["result"], res["source_documents"]
 
     return answer, docs
@@ -251,9 +268,9 @@ def bot(history,
         k_context=5,
         num_return_sequences=1,
         ):
-    qa = retrieval_qa_pipline("cuda", True, promptTemplate_type="llama")
+    # qa = retrieval_qa_pipline("cuda", True, promptTemplate_type="llama")
 
-    res = qa(history[-1][0])
+    res = QA(history[-1][0])
     answer, docs = res["result"], res["source_documents"]
     history[-1][1] = answer
     return history
