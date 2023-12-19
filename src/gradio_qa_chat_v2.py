@@ -254,7 +254,7 @@ def bot(history,
     return history
 
 
-def bot1(history, device_type, use_history, model_type
+def bot1(history, device_type, use_history, model_type,
          ):
     qa = retrieval_qa_pipline(device_type, use_history, promptTemplate_type=model_type)
 
