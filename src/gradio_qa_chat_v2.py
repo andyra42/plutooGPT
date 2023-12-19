@@ -255,7 +255,7 @@ def bot(history,
 
     res = qa(history[-1][0])
     answer, docs = res["result"], res["source_documents"]
-    history[-1][1] = res['answer']
+    history[-1][1] = answer
     return history
 
 
