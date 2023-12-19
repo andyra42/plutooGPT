@@ -251,6 +251,11 @@ def bot(history,
         k_context=5,
         num_return_sequences=1,
         ):
+    qa = retrieval_qa_pipline("cuda", True, promptTemplate_type="llama")
+
+    res = qa(history[-1][0])
+    answer, docs = res["result"], res["source_documents"]
+    history[-1][1] = res['answer']
     return history
 
 
@@ -260,10 +265,8 @@ def bot1(history, device_type, use_history, model_type,
 
     res = qa(history[-1][0])
     answer, docs = res["result"], res["source_documents"]
-    history[-1][1] = res['result']
-    return history
 
-
+    return answer
 
 
 def main(device_type="cuda", show_sources=True, use_history=False, model_type="llama", save_qa=False):
@@ -334,12 +337,12 @@ def main(device_type="cuda", show_sources=True, use_history=False, model_type="l
                     with gr.Column(scale=1):
                         clear_btn = gr.Button('Clear', variant='stop', size='sm')
                 txt.submit(add_text, [chatbot, txt], [chatbot, txt]).then(
-                    bot1,
-                    [chatbot, device_type, use_history, model_type],
+                    bot,
+                    [chatbot, instruction, temperature, max_new_tokens, repetition_penalty, top_k, top_p, k_context],
                     chatbot)
                 submit_btn.click(add_text, [chatbot, txt], [chatbot, txt]).then(
-                    bot1,
-                    [chatbot, device_type, use_history, model_type],
+                    bot,
+                    [chatbot, instruction, temperature, max_new_tokens, repetition_penalty, top_k, top_p, k_context],
                     chatbot).then(
                     clear_cuda_cache, None, None
                 )
