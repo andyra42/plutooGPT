@@ -70,8 +70,10 @@ else:
     DEVICE_TYPE = "cpu"
 
 SHOW_SOURCES = True
+USE_HISTORY = False
 logging.info(f"Running on: {DEVICE_TYPE}")
 logging.info(f"Display Source Documents set to: {SHOW_SOURCES}")
+logging.info(f"Use history set to: {USE_HISTORY}")
 
 
 def load_model(device_type, model_id, model_basename=None, LOGGING=logging):
@@ -189,10 +191,10 @@ def retrieval_qa_pipline(device_type, use_history, promptTemplate_type="llama"):
 
     # load the llm pipeline
     # llm = load_model(device_type, model_id=MODEL_ID, model_basename=MODEL_BASENAME, LOGGING=logging)
-    print("use_history")
-    print(use_history)
+    print("USE_HISTORY")
+    print(USE_HISTORY)
     # print("prompt" + prompt)
-    if use_history:
+    if USE_HISTORY:
         qa = RetrievalQA.from_chain_type(
             llm=LLM,
             chain_type="stuff",  # try other chains types as well. refine, map_reduce, map_rerank
@@ -203,7 +205,7 @@ def retrieval_qa_pipline(device_type, use_history, promptTemplate_type="llama"):
         )
     else:
         qa = RetrievalQA.from_chain_type(
-            llm=llm,
+            llm=LLM,
             chain_type="stuff",  # try other chains types as well. refine, map_reduce, map_rerank
             retriever=retriever,
             return_source_documents=True,  # verbose=True,
@@ -240,7 +242,7 @@ def bot(history,
     return history
 
 
-def main(device_type="cuda", show_sources=True, use_history=False, model_type="llama", save_qa=False):
+def main():
     """
         Implements the main information retrieval task for a localGPT.
 
@@ -260,10 +262,6 @@ def main(device_type="cuda", show_sources=True, use_history=False, model_type="l
         - The source documents are displayed if the show_sources flag is set to True.
 
         """
-
-    logging.info(f"Running on: {device_type}")
-    logging.info(f"Display Source Documents set to: {show_sources}")
-    logging.info(f"Use history set to: {use_history}")
 
     # check if models directory do not exist, create a new one and store models here.
     if not os.path.exists(MODELS_PATH):
