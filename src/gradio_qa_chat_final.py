@@ -75,6 +75,7 @@ USE_HISTORY = False
 logging.info(f"Running on: {DEVICE_TYPE}")
 logging.info(f"Display Source Documents set to: {SHOW_SOURCES}")
 logging.info(f"Use history set to: {USE_HISTORY}")
+FORMATTED_SOURCES = ""
 
 
 def load_model(device_type, model_id, model_basename=None, LOGGING=logging):
@@ -239,12 +240,15 @@ def bot(history,
 
     res = QA(history[-1][0])
     answer, docs = res["result"], res["source_documents"]
+    formatted_sources =""
     print("####################DOCS###############")
     print("----------------------------------SOURCE DOCUMENTS---------------------------")
     for document in docs:
         print("\n> " + document.metadata["source"] + ":")
         print(document.page_content)
+        formatted_sources = formatted_sources+document.metadata["source"] + ":"+document.page_content+"</br>"
     print("----------------------------------SOURCE DOCUMENTS---------------------------")
+    FORMATTED_SOURCES = formatted_sources
     # history[-1][1] = answer
     history[-1][1] = ""
     for character in answer:
@@ -325,6 +329,8 @@ def main():
                     chatbot).then(
                     clear_cuda_cache, None, None
                 )
+                with gr.Accordion("Sources"):
+                    gr.Markdown(FORMATTED_SOURCES)
 
         # Launch gradio app
     print("Launching gradio app")
