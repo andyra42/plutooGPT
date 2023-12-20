@@ -163,7 +163,8 @@ def retrieval_qa_pipline(device_type, use_history, promptTemplate_type="llama"):
 
     # load the llm pipeline
     llm = load_model(device_type, model_id=MODEL_ID, model_basename=MODEL_BASENAME, LOGGING=logging)
-
+    print("use_history"+use_history)
+    print("prompt" + prompt)
     if use_history:
         qa = RetrievalQA.from_chain_type(
             llm=llm,
