@@ -240,7 +240,11 @@ def bot(history,
     res = QA(history[-1][0])
     answer, docs = res["result"], res["source_documents"]
     print("####################DOCS###############")
-    print(docs)
+    print("----------------------------------SOURCE DOCUMENTS---------------------------")
+    for document in docs:
+        print("\n> " + document.metadata["source"] + ":")
+        print(document.page_content)
+    print("----------------------------------SOURCE DOCUMENTS---------------------------")
     # history[-1][1] = answer
     history[-1][1] = ""
     for character in answer:
