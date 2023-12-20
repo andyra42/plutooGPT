@@ -283,7 +283,7 @@ def main():
         representation of information.''')
 
         with gr.Row():
-            with gr.Column(scale=1, variant='panel'):
+            with gr.Column(scale=1, variant='panel', visible=False):
                 with gr.Accordion(label="Text generation tuning parameters"):
                     temperature = gr.Slider(label="temperature", minimum=0.1, maximum=1, value=0.1, step=0.05)
                     max_new_tokens = gr.Slider(label="max_new_tokens", minimum=1, maximum=2048, value=512, step=1)
@@ -293,10 +293,10 @@ def main():
                     top_p = gr.Slider(label="top_p", minimum=0, maximum=1, value=0.95, step=0.05)
                     k_context = gr.Slider(label="k_context", minimum=1, maximum=15, value=5, step=1)
                 instruction = gr.Textbox(label="System instruction", lines=3,
-                                         value="Use the following pieces of context to answer the question at the end by. "
+                                         value="Use the following pieces of context to answer the question at the end by."
                                                "Generate the answer based on the given context only.If you do not find "
                                                "any information related to the question in the given context, "
-                                               "just say that you don't know, don't try to make up an answer. Keep your "
+                                               "just say that you don't know, don't try to make up an answer. Keep your"
                                                "answer expressive.")
             with gr.Column(scale=3, variant='panel'):
                 chatbot = gr.Chatbot([], elem_id="chatbot",
