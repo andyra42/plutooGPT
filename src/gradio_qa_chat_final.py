@@ -2,6 +2,7 @@
 import gc
 import logging
 import os
+import time
 # PyTorch is an open source machine learning (ML) framework based on the Python programming language and the Torch
 # library. Torch is an open source ML library used for creating deep neural networks and is written in the Lua
 # scripting language.
@@ -238,7 +239,13 @@ def bot(history,
 
     res = QA(history[-1][0])
     answer, docs = res["result"], res["source_documents"]
-    history[-1][1] = answer
+    # history[-1][1] = answer
+    history[-1][1] = ""
+    for character in answer:
+        history[-1][1] += character
+        time.sleep(0.05)
+        yield history
+
     return history
 
 
@@ -318,7 +325,7 @@ def main():
 
         # Launch gradio app
     print("Launching gradio app")
-    demo.queue(concurrency_count=3)
+    demo.queue(max_size=10)
     demo.launch(share=True,
                 enable_queue=True,
                 debug=True,
