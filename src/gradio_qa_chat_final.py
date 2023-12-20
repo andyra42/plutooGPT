@@ -280,7 +280,7 @@ def main():
     with gr.Blocks(gr.themes.Soft(primary_hue=gr.themes.colors.slate, secondary_hue=gr.themes.colors.purple)) as demo:
         gr.Markdown('''# Application Support \n This Application Utilizes RAG Retrieval-Augmented Generation) an AI 
         framework that allows LLMs to retrieve facts from an external knowledge base to supplement their internal 
-        representation of information. ) 
+        representation of information.''')
 
         with gr.Row():
             with gr.Column(scale=1, variant='panel'):
