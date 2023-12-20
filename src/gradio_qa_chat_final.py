@@ -277,13 +277,13 @@ def main():
     # Configure gradio QA app
     print("Configuring gradio app")
 
-    with gr.Blocks(gr.themes.Soft(primary_hue=gr.themes.colors.slate, secondary_hue=gr.themes.colors.purple)) as demo:
+    with gr.Blocks(gr.themes.Soft(primary_hue=gr.themes.colors.slabluete, secondary_hue=gr.themes.colors.purple)) as demo:
         gr.Markdown('''# Application Support \n This Application Utilizes RAG Retrieval-Augmented Generation) an AI 
         framework that allows LLMs to retrieve facts from an external knowledge base to supplement their internal 
         representation of information.''')
 
         with gr.Row():
-            with gr.Column(scale=1, variant='panel', visible=False):
+            with gr.Column(scale=1, variant='panel', visible=True):
                 with gr.Accordion(label="Text generation tuning parameters"):
                     temperature = gr.Slider(label="temperature", minimum=0.1, maximum=1, value=0.1, step=0.05)
                     max_new_tokens = gr.Slider(label="max_new_tokens", minimum=1, maximum=2048, value=512, step=1)
@@ -300,7 +300,7 @@ def main():
                                                "answer expressive.")
             with gr.Column(scale=3, variant='panel'):
                 chatbot = gr.Chatbot([], elem_id="chatbot",
-                                     label='Chatbox', height=725, )
+                                     label='Chatbox', height=600, )
                 txt = gr.Textbox(label="Question", lines=2, placeholder="Enter your question and press shift+enter ")
 
                 with gr.Row():
