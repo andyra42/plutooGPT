@@ -166,7 +166,7 @@ def retrieval_qa_pipline(device_type, use_history, promptTemplate_type="llama"):
     llm = load_model(device_type, model_id=MODEL_ID, model_basename=MODEL_BASENAME, LOGGING=logging)
     print("use_history")
     print(use_history)
-    print("prompt" + prompt)
+    # print("prompt" + prompt)
     if use_history:
         qa = RetrievalQA.from_chain_type(
             llm=llm,
