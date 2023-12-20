@@ -157,6 +157,7 @@ def retrieval_qa_pipline(device_type, use_history, promptTemplate_type="llama"):
         client_settings=CHROMA_SETTINGS
     )
     retriever = db.as_retriever()
+    use_history = False
 
     # get the prompt template and memory if set by the user.
     prompt, memory = get_prompt_template(promptTemplate_type=promptTemplate_type, history=use_history)
