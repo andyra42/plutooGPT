@@ -300,7 +300,7 @@ def main():
                                                "answer expressive.")
             with gr.Column(scale=3, variant='panel'):
                 chatbot = gr.Chatbot([], elem_id="chatbot",
-                                     label='Chatbox', height=600, )
+                                     label='Chatbox', height=550, )
                 txt = gr.Textbox(label="Question", lines=2, placeholder="Enter your question and press shift+enter ")
 
                 with gr.Row():
