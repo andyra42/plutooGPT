@@ -246,7 +246,7 @@ def bot(history,
     for document in docs:
         print("\n> " + document.metadata["source"] + ":")
         print(document.page_content)
-        formatted_sources = formatted_sources+document.metadata["source"] + ":"+document.page_content+"</br>"
+        formatted_sources = "</br>"+formatted_sources+document.metadata["source"] + ":"+document.page_content+"</br>"
     print("----------------------------------SOURCE DOCUMENTS---------------------------")
     FORMATTED_SOURCES = formatted_sources
     # history[-1][1] = answer

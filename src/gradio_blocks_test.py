@@ -35,7 +35,7 @@ def bot(history,
                 <pre style='background-color:#d3d3d3;'>source content </pre>
             </details>
             """
-    accordion_html1 ="Hi anand"
+    accordion_html1 ="<h1>Hi anand</h1>"
     accordion_html += accordion_item
     print("input")
     print(history)
