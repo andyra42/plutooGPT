@@ -240,13 +240,14 @@ def bot(history,
 
     res = QA(history[-1][0])
     answer, docs = res["result"], res["source_documents"]
-    formatted_sources =""
+    formatted_sources = ""
     print("####################DOCS###############")
     print("----------------------------------SOURCE DOCUMENTS---------------------------")
     for document in docs:
         print("\n> " + document.metadata["source"] + ":")
         print(document.page_content)
-        formatted_sources = "</br>"+formatted_sources+document.metadata["source"] + ":"+document.page_content+"</br>"
+        formatted_sources = "</br><b>" + formatted_sources + document.metadata[
+            "source"] + "</b>" + ":" + document.page_content
     print("----------------------------------SOURCE DOCUMENTS---------------------------")
     FORMATTED_SOURCES = formatted_sources
     # history[-1][1] = answer
