@@ -308,6 +308,9 @@ def main():
                                                "any information related to the question in the given context, "
                                                "just say that you don't know, don't try to make up an answer. Keep your"
                                                "answer expressive.")
+                with gr.Accordion("Sources"):
+                    gr.Markdown(FORMATTED_SOURCES)
+
             with gr.Column(scale=3, variant='panel'):
                 chatbot = gr.Chatbot([], elem_id="chatbot",
                                      label='Chatbox', height=550, )
@@ -331,7 +334,7 @@ def main():
                 )
                 with gr.Accordion("Sources"):
                     gr.Markdown(FORMATTED_SOURCES)
-
+                live = True
         # Launch gradio app
     print("Launching gradio app")
     demo.queue(max_size=10)

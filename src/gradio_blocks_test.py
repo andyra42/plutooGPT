@@ -60,6 +60,13 @@ with gr.Blocks(gr.themes.Soft(primary_hue=gr.themes.colors.blue, secondary_hue=g
                                            "any information related to the question in the given context, "
                                            "just say that you don't know, don't try to make up an answer. Keep your "
                                            "answer expressive.")
+            with gr.Accordion("Sources"):
+                gr.Markdown("Use the following pieces of context to answer the question at the end by. "
+                                           "Generate the answer based on the given context only.If you do not find "
+                                           "any information related to the question in the given context, "
+                                           "just say that you don't know, don't try to make up an answer. Keep your "
+                                           "answer expressive.")
+
         with gr.Column(scale=3, variant='panel'):
             chatbot = gr.Chatbot([], elem_id="chatbot",
                                  label='Chatbox', height=600, )
