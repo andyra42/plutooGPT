@@ -1,5 +1,6 @@
 import gradio as gr
 import gc, torch
+import time
 
 
 def update(name):
@@ -34,6 +35,7 @@ def bot(history,
                 <pre style='background-color:#d3d3d3;'>source content </pre>
             </details>
             """
+    accordion_html1 ="Hi anand"
     accordion_html += accordion_item
     print("input")
     print(history)
@@ -41,6 +43,12 @@ def bot(history,
     print(top_p)
     print(history[-1][0])
     processed_responses = [[history, accordion_html]]
+    history[-1][1] = ""
+    for character in accordion_html1:
+        history[-1][1] += character
+        time.sleep(0.01)
+        yield history
+    print(history)
     return history
 
 
@@ -97,4 +105,4 @@ with gr.Blocks(gr.themes.Soft(primary_hue=gr.themes.colors.blue, secondary_hue=g
                 clear_cuda_cache, None, None
             )
 
-demo.launch()
+demo.launch(enable_queue=True)

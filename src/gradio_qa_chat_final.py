@@ -256,6 +256,11 @@ def bot(history,
         time.sleep(0.01)
         yield history
 
+    for character in formatted_sources:
+        history[-1][1] += character
+        time.sleep(0.01)
+        yield history
+
     return history
 
 
