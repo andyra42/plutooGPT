@@ -152,7 +152,7 @@ def clear_cuda_cache():
     return None
 
 
-def retrieval_qa_pipline(device_type, use_history, promptTemplate_type="llama"):
+def retrieval_qa_pipline(device_type, use_history, promptTemplate_type="mistral"):
     """
     Initializes and returns a retrieval-based Question Answering (QA) pipeline.
 

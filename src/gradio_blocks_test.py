@@ -26,11 +26,21 @@ def bot(history,
         k_context=5,
         num_return_sequences=1,
         ):
+    accordion_html = ""
+    accordion_html += f"<p>\"main_answer\"</p><hr><br><br><br><br>"
+    accordion_item = f"""
+            <details>
+                <summary><strong>Source 1: test.pdf</strong></summary>
+                <pre style='background-color:#d3d3d3;'>source content </pre>
+            </details>
+            """
+    accordion_html += accordion_item
     print("input")
     print(history)
     print(k_context)
     print(top_p)
     print(history[-1][0])
+    processed_responses = [[history, accordion_html]]
     return history
 
 
