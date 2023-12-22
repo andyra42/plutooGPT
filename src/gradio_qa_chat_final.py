@@ -323,8 +323,11 @@ def main():
                                                "any information related to the question in the given context, "
                                                "just say that you don't know, don't try to make up an answer. Keep your"
                                                "answer expressive.")
-                with gr.Accordion("Sources"):
-                    gr.Markdown(FORMATTED_SOURCES)
+                with gr.Accordion("Config Parameters"):
+                    gr.Label(label="LLM MODEL", value=MODEL_BASENAME)
+                    gr.Label(label="DEVICE TYPE", value=DEVICE_TYPE)
+                    gr.Label(label="EMBEDDING MODEL", value=EMBEDDING_MODEL_NAME)
+                    gr.Label(label="CONTEXT WINDOW", value=MAX_NEW_TOKENS)
 
             with gr.Column(scale=3, variant='panel'):
                 chatbot = gr.Chatbot([], elem_id="chatbot",

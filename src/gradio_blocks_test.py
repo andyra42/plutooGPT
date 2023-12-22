@@ -2,6 +2,8 @@ import gradio as gr
 import gc, torch
 import time
 
+GLOBAL_VAR = "LLAMA"
+
 
 def update(name):
     return f"Welcome to Gradio, {name}!"
@@ -92,10 +94,12 @@ with gr.Blocks(gr.themes.Soft(primary_hue=gr.themes.colors.blue, secondary_hue=g
                             "any information related to the question in the given context, "
                             "just say that you don't know, don't try to make up an answer. Keep your "
                             "answer expressive.")
+                gr.Label(label="LLM MODEL", value=GLOBAL_VAR)
+                gr.Label(label="LLM MODEL", value=GLOBAL_VAR)
 
         with gr.Column(scale=3, variant='panel'):
             chatbot = gr.Chatbot([], elem_id="chatbot",
-                                 label='Chatbox', height=600, )
+                                 label='Chatbox', height=600)
             txt = gr.Textbox(label="Question", lines=2, placeholder="Enter your question and press shift+enter ")
 
             with gr.Row():
@@ -104,6 +108,15 @@ with gr.Blocks(gr.themes.Soft(primary_hue=gr.themes.colors.blue, secondary_hue=g
 
                 with gr.Column(scale=1):
                     clear_btn = gr.Button('Clear', variant='stop', size='sm')
+            with gr.Row():
+                gr.Examples(
+                    [["What is Pool Net ?"], ["What is Trade Comparison in RTTM MBS ?"],
+                     ["What is swap explain in detail"]],
+                    [txt],
+                    chatbot,
+                    # cache_examples=True,
+                )
+                gr.Label(label="LLM MODEL", value=GLOBAL_VAR)
             txt.submit(add_text, [chatbot, txt], [chatbot, txt]).then(
                 bot, [chatbot, instruction, temperature, max_new_tokens, repetition_penalty, top_k, top_p, k_context],
                 chatbot)
