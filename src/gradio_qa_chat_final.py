@@ -223,6 +223,12 @@ def retrieval_qa_pipline(device_type, use_history, promptTemplate_type="mistral"
 QA = retrieval_qa_pipline(DEVICE_TYPE, SHOW_SOURCES, promptTemplate_type=LLM)
 
 
+def post_process_answer(answer, source):
+    answer += f"<br><br>Source: {source}"
+    answer = answer.replace("\n", "<br>")
+    return answer
+
+
 def bot(history,
         instruction="Use the following pieces of context to answer the question at the end. Generate the answer based "
                     "on the given context only if you find the answer in the context. If you do not find any "
@@ -248,19 +254,22 @@ def bot(history,
         print(document.page_content)
         formatted_sources = "</br><b>" + formatted_sources + document.metadata[
             "source"] + "</b>" + ":" + document.page_content
+        print(formatted_sources)
     print("----------------------------------SOURCE DOCUMENTS---------------------------")
     FORMATTED_SOURCES = formatted_sources
     # history[-1][1] = answer
+    answer = post_process_answer(answer, docs)
+
     history[-1][1] = ""
     for character in answer:
         history[-1][1] += character
         time.sleep(0.01)
         yield history
-
-    for character in formatted_sources:
-        history[-1][1] += character
-        time.sleep(0.01)
-        yield history
+    #
+    # for character in formatted_sources:
+    #     history[-1][1] += character
+    #     time.sleep(0.01)
+    #     yield history
 
     return history
 

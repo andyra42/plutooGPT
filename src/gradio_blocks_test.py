@@ -14,6 +14,12 @@ def add_text(history, text):
     return history, ""
 
 
+def post_process_answer(answer, source):
+    answer += f"<br><br>Source: {source}"
+    answer = answer.replace("\n", "<br>")
+    return answer
+
+
 def bot(history,
         instruction="Use the following pieces of context to answer the question at the end. Generate the answer based "
                     "on the given context only if you find the answer in the context. If you do not find any "
@@ -35,7 +41,7 @@ def bot(history,
                 <pre style='background-color:#d3d3d3;'>source content </pre>
             </details>
             """
-    accordion_html1 ="<h1>Hi anand</h1>"
+    accordion_html1 = "\n\n<b>Hi anand</b>'</br>Rapolu"
     accordion_html += accordion_item
     print("input")
     print(history)
@@ -72,6 +78,8 @@ with gr.Blocks(gr.themes.Soft(primary_hue=gr.themes.colors.blue, secondary_hue=g
                 top_k = gr.Slider(label="top_k", minimum=1, maximum=1000, value=10, step=1)
                 top_p = gr.Slider(label="top_p", minimum=0, maximum=1, value=0.95, step=0.05)
                 k_context = gr.Slider(label="k_context", minimum=1, maximum=15, value=5, step=1)
+                html = gr.HTML(label="HTML preview", show_label=True)
+
             instruction = gr.Textbox(label="System instruction", lines=3,
                                      value="Use the following pieces of context to answer the question at the end by. "
                                            "Generate the answer based on the given context only.If you do not find "
@@ -80,10 +88,10 @@ with gr.Blocks(gr.themes.Soft(primary_hue=gr.themes.colors.blue, secondary_hue=g
                                            "answer expressive.")
             with gr.Accordion("Sources"):
                 gr.Markdown("Use the following pieces of context to answer the question at the end by. "
-                                           "Generate the answer based on the given context only.If you do not find "
-                                           "any information related to the question in the given context, "
-                                           "just say that you don't know, don't try to make up an answer. Keep your "
-                                           "answer expressive.")
+                            "Generate the answer based on the given context only.If you do not find "
+                            "any information related to the question in the given context, "
+                            "just say that you don't know, don't try to make up an answer. Keep your "
+                            "answer expressive.")
 
         with gr.Column(scale=3, variant='panel'):
             chatbot = gr.Chatbot([], elem_id="chatbot",
