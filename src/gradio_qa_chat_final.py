@@ -333,7 +333,7 @@ def main():
                                                "answer expressive.")
                 with gr.Accordion("Config Parameters"):
                     gr.HTML(label="LLM MODEL",
-                            value="<p style=\"color:red;\">LLM MODEL" + ": " + MODEL_BASENAME + "</p>")
+                            value="<p style=\"color:red;\"><b>LLM MODEL</b>" + ": " + MODEL_BASENAME + "</p>")
                     gr.Label(label="DEVICE TYPE", value=DEVICE_TYPE)
                     gr.Label(label="EMBEDDING MODEL", value=EMBEDDING_MODEL_NAME)
                     gr.Label(label="CONTEXT WINDOW", value=MAX_NEW_TOKENS)
