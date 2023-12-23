@@ -317,8 +317,10 @@ def main():
             with gr.Column(scale=1, variant='panel', visible=True):
                 with gr.Accordion(label="Text generation tuning parameters"):
                     temperature = gr.Slider(label="temperature", minimum=0.1, maximum=1, value=TEMPERATURE, step=0.05)
-                    max_new_tokens = gr.Slider(label="max_new_tokens", minimum=1, maximum=2048, value=MAX_NEW_TOKENS, step=1)
-                    repetition_penalty = gr.Slider(label="repetition_penalty", minimum=0, maximum=2, value=REPETITION_PENALTY,
+                    max_new_tokens = gr.Slider(label="max_new_tokens", minimum=1, maximum=2048, value=MAX_NEW_TOKENS,
+                                               step=1)
+                    repetition_penalty = gr.Slider(label="repetition_penalty", minimum=0, maximum=2,
+                                                   value=REPETITION_PENALTY,
                                                    step=0.1)
                     top_k = gr.Slider(label="top_k", minimum=1, maximum=1000, value=TOP_K, step=1)
                     top_p = gr.Slider(label="top_p", minimum=0, maximum=1, value=TOP_P, step=0.05)
@@ -330,7 +332,8 @@ def main():
                                                "just say that you don't know, don't try to make up an answer. Keep your"
                                                "answer expressive.")
                 with gr.Accordion("Config Parameters"):
-                    gr.HTML(label="LLM MODEL", value="LLM MODEL : "+MODEL_BASENAME)
+                    gr.HTML(label="LLM MODEL",
+                            value="<p style=\"color:red;\">LLM MODEL" + ": " + MODEL_BASENAME + "</p>")
                     gr.Label(label="DEVICE TYPE", value=DEVICE_TYPE)
                     gr.Label(label="EMBEDDING MODEL", value=EMBEDDING_MODEL_NAME)
                     gr.Label(label="CONTEXT WINDOW", value=MAX_NEW_TOKENS)
