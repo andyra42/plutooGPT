@@ -330,7 +330,7 @@ def main():
                                                "just say that you don't know, don't try to make up an answer. Keep your"
                                                "answer expressive.")
                 with gr.Accordion("Config Parameters"):
-                    gr.Label(label="LLM MODEL", value=MODEL_BASENAME)
+                    gr.HTML(label="LLM MODEL", value="LLM MODEL : "+MODEL_BASENAME)
                     gr.Label(label="DEVICE TYPE", value=DEVICE_TYPE)
                     gr.Label(label="EMBEDDING MODEL", value=EMBEDDING_MODEL_NAME)
                     gr.Label(label="CONTEXT WINDOW", value=MAX_NEW_TOKENS)
