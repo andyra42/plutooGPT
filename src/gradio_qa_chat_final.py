@@ -334,9 +334,12 @@ def main():
                 with gr.Accordion("Config Parameters"):
                     gr.HTML(label="LLM MODEL",
                             value="<p style=\"color:red;\"><b>LLM MODEL</b>" + ": " + MODEL_BASENAME + "</p>")
-                    gr.Label(label="DEVICE TYPE", value=DEVICE_TYPE)
-                    gr.Label(label="EMBEDDING MODEL", value=EMBEDDING_MODEL_NAME)
-                    gr.Label(label="CONTEXT WINDOW", value=MAX_NEW_TOKENS)
+                    gr.HTML(label="DEVICE TYPE",
+                            value="<p style=\"color:red;\"><b>DEVICE TYPE</b>" + ": " + DEVICE_TYPE + "</p>")
+                    gr.HTML(label="EMBEDDING MODEL",
+                            value="<p style=\"color:red;\"><b>EMBEDDING MODEL</b>" + ": " + EMBEDDING_MODEL_NAME + "</p>")
+                    gr.HTML(label="CONTEXT WINDOW",
+                            value="<p style=\"color:red;\"><b>CONTEXT WINDOW</b>" + ": " + MAX_NEW_TOKENS + "</p>")
 
             with gr.Column(scale=3, variant='panel'):
                 chatbot = gr.Chatbot([], elem_id="chatbot",
