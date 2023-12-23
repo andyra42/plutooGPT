@@ -348,11 +348,11 @@ def main():
                         clear_btn = gr.Button('Clear', variant='stop', size='sm')
                 txt.submit(add_text, [chatbot, txt], [chatbot, txt]).then(
                     bot,
-                    [chatbot, instruction, temperature, max_new_tokens, repetition_penalty, top_k, top_p, k_context],
+                    [chatbot, instruction, temperature, max_new_tokens, repetition_penalty, top_k, top_p],
                     chatbot)
                 submit_btn.click(add_text, [chatbot, txt], [chatbot, txt]).then(
                     bot,
-                    [chatbot, instruction, temperature, max_new_tokens, repetition_penalty, top_k, top_p, k_context],
+                    [chatbot, instruction, temperature, max_new_tokens, repetition_penalty, top_k, top_p],
                     chatbot).then(
                     clear_cuda_cache, None, None
                 )
