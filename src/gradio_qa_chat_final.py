@@ -346,6 +346,14 @@ def main():
 
                     with gr.Column(scale=1):
                         clear_btn = gr.Button('Clear', variant='stop', size='sm')
+                with gr.Row():
+                    gr.Examples(
+                        [["What is Pool Net ?"], ["What is Trade Comparison in RTTM MBS ?"],
+                         ["What is swap explain in detail"]],
+                        [txt],
+                        chatbot,
+                        # cache_examples=True,
+                    )
                 txt.submit(add_text, [chatbot, txt], [chatbot, txt]).then(
                     bot,
                     [chatbot, instruction, temperature, max_new_tokens, repetition_penalty, top_k, top_p],
