@@ -339,7 +339,7 @@ def main():
                     gr.HTML(label="EMBEDDING MODEL",
                             value="<p style=\"color:red;\"><b>EMBEDDING MODEL</b>" + ": " + EMBEDDING_MODEL_NAME + "</p>")
                     gr.HTML(label="CONTEXT WINDOW",
-                            value="<p style=\"color:red;\"><b>CONTEXT WINDOW</b>" + ": " + MAX_NEW_TOKENS + "</p>")
+                            value="<p style=\"color:red;\"><b>CONTEXT WINDOW</b>" + ": " + str(MAX_NEW_TOKENS) + "</p>")
 
             with gr.Column(scale=3, variant='panel'):
                 chatbot = gr.Chatbot([], elem_id="chatbot",
