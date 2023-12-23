@@ -72,6 +72,11 @@ else:
 
 SHOW_SOURCES = True
 USE_HISTORY = False
+TEMPERATURE = 0.7
+REPETITION_PENALTY = 1.176
+TOP_P = 0.1
+TOP_K = 40
+
 logging.info(f"Running on: {DEVICE_TYPE}")
 logging.info(f"Display Source Documents set to: {SHOW_SOURCES}")
 logging.info(f"Use history set to: {USE_HISTORY}")
@@ -124,9 +129,10 @@ def load_model(device_type, model_id, model_basename=None, LOGGING=logging):
         model=model,
         tokenizer=tokenizer,
         max_length=MAX_NEW_TOKENS,
-        temperature=0.2,
-        # top_p=0.95,
-        repetition_penalty=1.15,
+        temperature=TEMPERATURE,
+        top_p=TOP_P,
+        top_k=TOP_K,
+        repetition_penalty=REPETITION_PENALTY,
         generation_config=generation_config,
     )
 
@@ -310,13 +316,13 @@ def main():
         with gr.Row():
             with gr.Column(scale=1, variant='panel', visible=True):
                 with gr.Accordion(label="Text generation tuning parameters"):
-                    temperature = gr.Slider(label="temperature", minimum=0.1, maximum=1, value=0.1, step=0.05)
-                    max_new_tokens = gr.Slider(label="max_new_tokens", minimum=1, maximum=2048, value=512, step=1)
-                    repetition_penalty = gr.Slider(label="repetition_penalty", minimum=0, maximum=2, value=1.1,
+                    temperature = gr.Slider(label="temperature", minimum=0.1, maximum=1, value=TEMPERATURE, step=0.05)
+                    max_new_tokens = gr.Slider(label="max_new_tokens", minimum=1, maximum=2048, value=MAX_NEW_TOKENS, step=1)
+                    repetition_penalty = gr.Slider(label="repetition_penalty", minimum=0, maximum=2, value=REPETITION_PENALTY,
                                                    step=0.1)
-                    top_k = gr.Slider(label="top_k", minimum=1, maximum=1000, value=10, step=1)
-                    top_p = gr.Slider(label="top_p", minimum=0, maximum=1, value=0.95, step=0.05)
-                    k_context = gr.Slider(label="k_context", minimum=1, maximum=15, value=5, step=1)
+                    top_k = gr.Slider(label="top_k", minimum=1, maximum=1000, value=TOP_K, step=1)
+                    top_p = gr.Slider(label="top_p", minimum=0, maximum=1, value=TOP_P, step=0.05)
+
                 instruction = gr.Textbox(label="System instruction", lines=3,
                                          value="Use the following pieces of context to answer the question at the end by."
                                                "Generate the answer based on the given context only.If you do not find "

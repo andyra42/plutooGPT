@@ -3,6 +3,7 @@ import gc, torch
 import time
 
 GLOBAL_VAR = "LLAMA"
+TEMPARATURE = 0.2
 
 
 def update(name):
@@ -57,7 +58,8 @@ def bot(history,
         time.sleep(0.01)
         yield history
     print(history)
-    return history
+    print(gr.HTML(history).value)
+    return gr.HTML(history).value
 
 
 def clear_cuda_cache():
@@ -74,8 +76,10 @@ with gr.Blocks(gr.themes.Soft(primary_hue=gr.themes.colors.blue, secondary_hue=g
     with gr.Row():
         with gr.Column(scale=1, variant='panel'):
             with gr.Accordion(label="Text generation tuning parameters"):
-                temperature = gr.Slider(label="temperature", minimum=0.1, maximum=1, value=0.1, step=0.05)
-                max_new_tokens = gr.Slider(label="max_new_tokens", minimum=1, maximum=2048, value=512, step=1)
+                temperature = gr.Slider(label="temperature", minimum=0.1, maximum=1, value=TEMPARATURE, step=0.05,
+                                        interactive=False)
+                max_new_tokens = gr.Slider(label="max_new_tokens", minimum=1, maximum=2048, value=512, step=1,
+                                           interactive=False)
                 repetition_penalty = gr.Slider(label="repetition_penalty", minimum=0, maximum=2, value=1.1, step=0.1)
                 top_k = gr.Slider(label="top_k", minimum=1, maximum=1000, value=10, step=1)
                 top_p = gr.Slider(label="top_p", minimum=0, maximum=1, value=0.95, step=0.05)
@@ -95,7 +99,8 @@ with gr.Blocks(gr.themes.Soft(primary_hue=gr.themes.colors.blue, secondary_hue=g
                             "just say that you don't know, don't try to make up an answer. Keep your "
                             "answer expressive.")
                 gr.Label(label="LLM MODEL", value=GLOBAL_VAR)
-                gr.Label(label="LLM MODEL", value=GLOBAL_VAR)
+                gr.HTML(label="LLM MODEL", value="<p style=\"color:red;\">Red paragraph text</p>")
+                gr.HTML(label="LLM MODEL", value="<b>LLM MODEL</b>"+" :"+"<p style=\"color:red;\">"+GLOBAL_VAR+"</p>", show_label=True)
 
         with gr.Column(scale=3, variant='panel'):
             chatbot = gr.Chatbot([], elem_id="chatbot",
