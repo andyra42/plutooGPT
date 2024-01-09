@@ -235,6 +235,12 @@ def post_process_answer(answer, source):
     return answer
 
 
+def srcshowfn(chkbox):
+    vis = True if chkbox == True else False
+    print(vis)
+    return gr.Textbox.update(visible=vis)
+
+
 def bot(history,
         instruction="Use the following pieces of context to answer the question at the end. Generate the answer based "
                     "on the given context only if you find the answer in the context. If you do not find any "
@@ -360,6 +366,11 @@ def main():
                         chatbot,
                         # cache_examples=True,
                     )
+                with gr.Row():
+                    srcshow = gr.Checkbox(value=False, label='Show sources')
+                with gr.Row():
+                    outputsrc = gr.Textbox(label="Sources", visible=False)
+                srcshow.change(srcshowfn, inputs=srcshow, outputs=outputsrc)
                 txt.submit(add_text, [chatbot, txt], [chatbot, txt]).then(
                     bot,
                     [chatbot, instruction, temperature, max_new_tokens, repetition_penalty, top_k, top_p],
@@ -380,7 +391,7 @@ def main():
                 enable_queue=True,
                 debug=True,
                 show_error=True,
-                server_name='127.0.0.1',
+                server_name='0.0.0.0',
                 server_port=7111)
     print("Gradio app ready")
 
