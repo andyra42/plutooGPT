@@ -374,7 +374,7 @@ def main():
                 txt.submit(add_text, [chatbot, txt], [chatbot, txt]).then(
                     bot,
                     [chatbot, instruction, temperature, max_new_tokens, repetition_penalty, top_k, top_p],
-                    chatbot, outputsrc)
+                    chatbot,outputsrc)
                 submit_btn.click(add_text, [chatbot, txt], [chatbot, txt]).then(
                     bot,
                     [chatbot, instruction, temperature, max_new_tokens, repetition_penalty, top_k, top_p],

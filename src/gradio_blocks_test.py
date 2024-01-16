@@ -23,6 +23,12 @@ def post_process_answer(answer, source):
     return answer
 
 
+def srcshowfn(chkbox):
+    vis = True if chkbox == True else False
+    print(vis)
+    return gr.Textbox.update(visible=vis)
+
+
 def bot(history,
         instruction="Use the following pieces of context to answer the question at the end. Generate the answer based "
                     "on the given context only if you find the answer in the context. If you do not find any "
@@ -100,7 +106,9 @@ with gr.Blocks(gr.themes.Soft(primary_hue=gr.themes.colors.blue, secondary_hue=g
                             "answer expressive.")
                 gr.Label(label="LLM MODEL", value=GLOBAL_VAR)
                 gr.HTML(label="LLM MODEL", value="<p style=\"color:red;\">Red paragraph text</p>")
-                gr.HTML(label="LLM MODEL", value="<b>LLM MODEL</b>"+" :"+"<p style=\"color:red;\">"+GLOBAL_VAR+"</p>", show_label=True)
+                gr.HTML(label="LLM MODEL",
+                        value="<b>LLM MODEL</b>" + " :" + "<p style=\"color:red;\">" + GLOBAL_VAR + "</p>",
+                        show_label=True)
 
         with gr.Column(scale=3, variant='panel'):
             chatbot = gr.Chatbot([], elem_id="chatbot",
@@ -122,6 +130,12 @@ with gr.Blocks(gr.themes.Soft(primary_hue=gr.themes.colors.blue, secondary_hue=g
                     # cache_examples=True,
                 )
                 gr.Label(label="LLM MODEL", value=GLOBAL_VAR)
+            with gr.Row():
+                srcshow = gr.Checkbox(value=False, label='Show sources')
+            with gr.Row():
+                outputsrc = gr.Textbox(label="Sources", visible=False)
+            srcshow.change(srcshowfn, inputs=srcshow, outputs=outputsrc)
+
             txt.submit(add_text, [chatbot, txt], [chatbot, txt]).then(
                 bot, [chatbot, instruction, temperature, max_new_tokens, repetition_penalty, top_k, top_p, k_context],
                 chatbot)
