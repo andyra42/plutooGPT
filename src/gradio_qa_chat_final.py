@@ -378,7 +378,7 @@ def main():
                 submit_btn.click(add_text, [chatbot, txt], [chatbot, txt]).then(
                     bot,
                     [chatbot, instruction, temperature, max_new_tokens, repetition_penalty, top_k, top_p],
-                    chatbot).then(
+                    chatbot, outputsrc).then(
                     clear_cuda_cache, None, None
                 )
                 with gr.Accordion("Sources"):
