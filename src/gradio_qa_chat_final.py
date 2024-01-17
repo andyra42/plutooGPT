@@ -72,6 +72,11 @@ else:
 
 SHOW_SOURCES = True
 USE_HISTORY = False
+TEMPERATURE = 0.7
+REPETITION_PENALTY = 1.176
+TOP_P = 0.1
+TOP_K = 40
+
 logging.info(f"Running on: {DEVICE_TYPE}")
 logging.info(f"Display Source Documents set to: {SHOW_SOURCES}")
 logging.info(f"Use history set to: {USE_HISTORY}")
@@ -124,9 +129,10 @@ def load_model(device_type, model_id, model_basename=None, LOGGING=logging):
         model=model,
         tokenizer=tokenizer,
         max_length=MAX_NEW_TOKENS,
-        temperature=0.2,
-        # top_p=0.95,
-        repetition_penalty=1.15,
+        temperature=TEMPERATURE,
+        top_p=TOP_P,
+        top_k=TOP_K,
+        repetition_penalty=REPETITION_PENALTY,
         generation_config=generation_config,
     )
 
@@ -223,6 +229,18 @@ def retrieval_qa_pipline(device_type, use_history, promptTemplate_type="llama"):
 QA = retrieval_qa_pipline(DEVICE_TYPE, SHOW_SOURCES, promptTemplate_type=LLM)
 
 
+def post_process_answer(answer, source):
+    answer += f"<br><br>Source: {source}"
+    answer = answer.replace("\n", "<br>")
+    return answer
+
+
+def srcshowfn(chkbox):
+    vis = True if chkbox == True else False
+    print(vis)
+    return gr.Textbox(visible=vis)
+
+
 def bot(history,
         instruction="Use the following pieces of context to answer the question at the end. Generate the answer based "
                     "on the given context only if you find the answer in the context. If you do not find any "
@@ -240,23 +258,32 @@ def bot(history,
 
     res = QA(history[-1][0])
     answer, docs = res["result"], res["source_documents"]
-    formatted_sources =""
+    formatted_sources = ""
     print("####################DOCS###############")
     print("----------------------------------SOURCE DOCUMENTS---------------------------")
     for document in docs:
         print("\n> " + document.metadata["source"] + ":")
         print(document.page_content)
-        formatted_sources = formatted_sources+document.metadata["source"] + ":"+document.page_content+"</br>"
-    print("----------------------------------SOURCE DOCUMENTS---------------------------")
+        formatted_sources = "</br><b>" + formatted_sources + document.metadata[
+            "source"] + "</b>" + ":" + document.page_content
+        print(formatted_sources)
+    print("----------------------------------SOURCE DOCUMENTS END---------------------------")
     FORMATTED_SOURCES = formatted_sources
     # history[-1][1] = answer
+    # answer = post_process_answer(answer, docs)
+
     history[-1][1] = ""
     for character in answer:
         history[-1][1] += character
         time.sleep(0.01)
         yield history
+    #
+    # for character in formatted_sources:
+    #     history[-1][1] += character
+    #     time.sleep(0.01)
+    #     yield history
 
-    return history
+    return history, docs
 
 
 def main():
@@ -295,21 +322,30 @@ def main():
         with gr.Row():
             with gr.Column(scale=1, variant='panel', visible=True):
                 with gr.Accordion(label="Text generation tuning parameters"):
-                    temperature = gr.Slider(label="temperature", minimum=0.1, maximum=1, value=0.1, step=0.05)
-                    max_new_tokens = gr.Slider(label="max_new_tokens", minimum=1, maximum=2048, value=512, step=1)
-                    repetition_penalty = gr.Slider(label="repetition_penalty", minimum=0, maximum=2, value=1.1,
+                    temperature = gr.Slider(label="temperature", minimum=0.1, maximum=1, value=TEMPERATURE, step=0.05)
+                    max_new_tokens = gr.Slider(label="max_new_tokens", minimum=1, maximum=2048, value=MAX_NEW_TOKENS,
+                                               step=1)
+                    repetition_penalty = gr.Slider(label="repetition_penalty", minimum=0, maximum=2,
+                                                   value=REPETITION_PENALTY,
                                                    step=0.1)
-                    top_k = gr.Slider(label="top_k", minimum=1, maximum=1000, value=10, step=1)
-                    top_p = gr.Slider(label="top_p", minimum=0, maximum=1, value=0.95, step=0.05)
-                    k_context = gr.Slider(label="k_context", minimum=1, maximum=15, value=5, step=1)
+                    top_k = gr.Slider(label="top_k", minimum=1, maximum=1000, value=TOP_K, step=1)
+                    top_p = gr.Slider(label="top_p", minimum=0, maximum=1, value=TOP_P, step=0.05)
+
                 instruction = gr.Textbox(label="System instruction", lines=3,
                                          value="Use the following pieces of context to answer the question at the end by."
                                                "Generate the answer based on the given context only.If you do not find "
                                                "any information related to the question in the given context, "
                                                "just say that you don't know, don't try to make up an answer. Keep your"
                                                "answer expressive.")
-                with gr.Accordion("Sources"):
-                    gr.Markdown(FORMATTED_SOURCES)
+                with gr.Accordion("Config Parameters"):
+                    gr.HTML(label="LLM MODEL",
+                            value="<p style=\"color:red;\"><b>LLM MODEL</b>" + ": " + MODEL_BASENAME + "</p>")
+                    gr.HTML(label="DEVICE TYPE",
+                            value="<p style=\"color:red;\"><b>DEVICE TYPE</b>" + ": " + DEVICE_TYPE + "</p>")
+                    gr.HTML(label="EMBEDDING MODEL",
+                            value="<p style=\"color:red;\"><b>EMBEDDING MODEL</b>" + ": " + EMBEDDING_MODEL_NAME + "</p>")
+                    gr.HTML(label="CONTEXT WINDOW",
+                            value="<p style=\"color:red;\"><b>CONTEXT WINDOW</b>" + ": " + str(MAX_NEW_TOKENS) + "</p>")
 
             with gr.Column(scale=3, variant='panel'):
                 chatbot = gr.Chatbot([], elem_id="chatbot",
@@ -322,18 +358,31 @@ def main():
 
                     with gr.Column(scale=1):
                         clear_btn = gr.Button('Clear', variant='stop', size='sm')
+                with gr.Row():
+                    gr.Examples(
+                        [["What is Pool Net ?"], ["Explain in detail what is  Pool Net ?"],
+                         ["What is Trade Comparison in RTTM MBS ?"],
+                         ["What is swap explain in detail"]],
+                        [txt],
+                        chatbot,
+                        # cache_examples=True,
+                    )
+                with gr.Row():
+                    srcshow = gr.Checkbox(value=False, label='Show sources')
+                with gr.Row():
+                    outputsrc = gr.Textbox(label="Sources", visible=False)
+                srcshow.change(srcshowfn, inputs=srcshow, outputs=outputsrc)
                 txt.submit(add_text, [chatbot, txt], [chatbot, txt]).then(
                     bot,
-                    [chatbot, instruction, temperature, max_new_tokens, repetition_penalty, top_k, top_p, k_context],
-                    chatbot)
+                    [chatbot, instruction, temperature, max_new_tokens, repetition_penalty, top_k, top_p],
+                    chatbot, outputsrc)
                 submit_btn.click(add_text, [chatbot, txt], [chatbot, txt]).then(
                     bot,
-                    [chatbot, instruction, temperature, max_new_tokens, repetition_penalty, top_k, top_p, k_context],
-                    chatbot).then(
+                    [chatbot, instruction, temperature, max_new_tokens, repetition_penalty, top_k, top_p],
+                    chatbot, outputsrc).then(
                     clear_cuda_cache, None, None
                 )
-                with gr.Accordion("Sources"):
-                    gr.Markdown(FORMATTED_SOURCES)
+                clear_btn.click(lambda: None, None, chatbot, queue=False)
                 live = True
         # Launch gradio app
     print("Launching gradio app")
@@ -342,7 +391,7 @@ def main():
                 enable_queue=True,
                 debug=True,
                 show_error=True,
-                server_name='127.0.0.1',
+                server_name='0.0.0.0',
                 server_port=7111)
     print("Gradio app ready")
 
