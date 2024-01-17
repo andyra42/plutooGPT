@@ -362,7 +362,7 @@ def main():
                     gr.Examples(
                         [["What is Pool Net ?"], ["Explain in detail what is  Pool Net ?"],
                          ["What is Trade Comparison in RTTM MBS ?"],
-                         ["What is swap explain in detail"]],
+                         ["What is Extended Pool Net in RTTM MBSD"]],
                         [txt],
                         chatbot,
                         # cache_examples=True,
