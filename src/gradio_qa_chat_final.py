@@ -382,6 +382,7 @@ def main():
                     chatbot, outputsrc).then(
                     clear_cuda_cache, None, None
                 )
+                clear_btn.click(lambda: None, None, chatbot, queue=False)
                 live = True
         # Launch gradio app
     print("Launching gradio app")
