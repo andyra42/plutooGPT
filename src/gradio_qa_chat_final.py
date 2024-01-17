@@ -238,7 +238,7 @@ def post_process_answer(answer, source):
 def srcshowfn(chkbox):
     vis = True if chkbox == True else False
     print(vis)
-    return gr.Textbox.update(visible=vis)
+    return gr.Textbox(visible=vis)
 
 
 def bot(history,
@@ -360,7 +360,8 @@ def main():
                         clear_btn = gr.Button('Clear', variant='stop', size='sm')
                 with gr.Row():
                     gr.Examples(
-                        [["What is Pool Net ?"], ["What is Trade Comparison in RTTM MBS ?"],
+                        [["What is Pool Net ?"], ["Explain in detail what is  Pool Net ?"],
+                         ["What is Trade Comparison in RTTM MBS ?"],
                          ["What is swap explain in detail"]],
                         [txt],
                         chatbot,
@@ -381,8 +382,6 @@ def main():
                     chatbot, outputsrc).then(
                     clear_cuda_cache, None, None
                 )
-                with gr.Accordion("Sources"):
-                    gr.Markdown(FORMATTED_SOURCES)
                 live = True
         # Launch gradio app
     print("Launching gradio app")
