@@ -260,17 +260,17 @@ def bot(history,
     answer, docs = res["result"], res["source_documents"]
     formatted_sources = ""
     print("####################DOCS###############")
-    print("----------------------------------SOURCE DOCUMENTS---------------------------")
+    print("----------------------------------SOURCE DOCUMENTS START---------------------------")
     for document in docs:
         print("\n> " + document.metadata["source"] + ":")
         print(document.page_content)
         formatted_sources = "</br><b>" + formatted_sources + document.metadata[
             "source"] + "</b>" + ":" + document.page_content
         print(formatted_sources)
-    print("----------------------------------SOURCE DOCUMENTS---------------------------")
+    print("----------------------------------SOURCE DOCUMENTS END---------------------------")
     FORMATTED_SOURCES = formatted_sources
     # history[-1][1] = answer
-    answer = post_process_answer(answer, docs)
+    # answer = post_process_answer(answer, docs)
 
     history[-1][1] = ""
     for character in answer:
