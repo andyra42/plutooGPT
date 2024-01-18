@@ -32,8 +32,13 @@ def load_single_document(file_path: str) -> Document:
         file_extension = os.path.splitext(file_path)[1]
         loader_class = DOCUMENT_MAP.get(file_extension)
         if loader_class:
-            file_log(file_path + ' loaded.')
-            loader = loader_class(file_path)
+            if file_extension == ".csv":
+                file_log(file_path + ' loaded. csv')
+                loader = loader_class(file_path, encoding="utf-8", csv_args={
+                    'delimiter': ','})
+            else:
+                file_log(file_path + ' loaded.')
+                loader = loader_class(file_path)
         else:
             file_log(file_path + ' document type is undefined.')
             raise ValueError("Document type is undefined")
