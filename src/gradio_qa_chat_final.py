@@ -270,7 +270,7 @@ def bot(history,
     print("----------------------------------SOURCE DOCUMENTS END---------------------------")
     FORMATTED_SOURCES = formatted_sources
     # history[-1][1] = answer
-    # answer = post_process_answer(answer, docs)
+    answer = post_process_answer(answer, docs)
 
     history[-1][1] = ""
     for character in answer:
