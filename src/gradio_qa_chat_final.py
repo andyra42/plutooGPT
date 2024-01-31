@@ -232,6 +232,7 @@ QA = retrieval_qa_pipline(DEVICE_TYPE, SHOW_SOURCES, promptTemplate_type=LLM)
 def post_process_answer(answer, source):
     answer += f"<br><br>Source: <details>   <summary>Epcot Center</summary>   <p>Epcot is a theme park at Walt Disney World Resort featuring exciting attractions, international pavilions, award-winning fireworks and seasonal special events.</p> </details>"
     answer = answer.replace("\n", "<br>")
+    print("Anand "+answer)
     return answer
 
 
@@ -263,8 +264,7 @@ def bot(history,
     print("----------------------------------SOURCE DOCUMENTS---------------------------")
     for document in docs:
         print("<\n> first sor " + document.metadata["source"] + ":")
-        print("second cont")
-        print(document.page_content)
+        # print(document.page_content)
         formatted_sources = "</br><b>" + formatted_sources + document.metadata[
             "source"] + "</b>" + ":" + document.page_content
         print("third  format")
