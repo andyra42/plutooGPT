@@ -262,10 +262,12 @@ def bot(history,
     print("####################DOCS###############")
     print("----------------------------------SOURCE DOCUMENTS---------------------------")
     for document in docs:
-        print("\n> " + document.metadata["source"] + ":")
+        print("<\n> first sor " + document.metadata["source"] + ":")
+        print("second cont")
         print(document.page_content)
         formatted_sources = "</br><b>" + formatted_sources + document.metadata[
             "source"] + "</b>" + ":" + document.page_content
+        print("third  format")
         print(formatted_sources)
     print("----------------------------------SOURCE DOCUMENTS END---------------------------")
     FORMATTED_SOURCES = formatted_sources
