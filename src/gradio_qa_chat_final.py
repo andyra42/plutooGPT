@@ -230,7 +230,7 @@ QA = retrieval_qa_pipline(DEVICE_TYPE, SHOW_SOURCES, promptTemplate_type=LLM)
 
 
 def post_process_answer(answer, source):
-    answer += f"<br><br>Source: <details>   <summary>Epcot Center</summary>   <p>Epcot is a theme park at Walt Disney World Resort featuring exciting attractions, international pavilions, award-winning fireworks and seasonal special events.</p> </details>"
+    answer += f"<br><br>Source: <div><details>   <summary>Epcot Center</summary>   <p>Epcot is a theme park at Walt Disney World Resort featuring exciting attractions, international pavilions, award-winning fireworks and seasonal special events.</p> </details></div>"
     answer = answer.replace("\n", "<br>")
     print("Anand "+answer)
     return answer
