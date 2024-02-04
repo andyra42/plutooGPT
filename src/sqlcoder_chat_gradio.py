@@ -31,6 +31,7 @@ def ask(message, history, schema):
         trust_remote_code=True,
         # torch_dtype=torch.bfloat16,
         # load_in_8bit=True,
+        bnb_4bit_compute_dtype=torch.bfloat16,
         load_in_4bit=True,
         device_map="auto",
         use_cache=True,
