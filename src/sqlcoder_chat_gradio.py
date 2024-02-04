@@ -50,6 +50,9 @@ def ask(message, history, schema):
     )
 
     outputs = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
+    print("####################################################")
+    print("outputs" + outputs[0])
+    print("####################################################")
 
     return tokenizer.decode(outputs[0].split("```sql")[-1].split("```")[0].split(";")[0].strip() + ";")
 
