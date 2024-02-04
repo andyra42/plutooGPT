@@ -76,4 +76,4 @@ with gr.Blocks() as demo:
         ask, additional_inputs=[db_schema]
     )
 
-demo.queue().launch()
+demo.queue().launch(share=True)
