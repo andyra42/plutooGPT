@@ -50,11 +50,11 @@ def ask(message, history, schema):
     )
 
     outputs = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
+    response = outputs[0].split("```sql")[-1].split("```")[0].split(";")[0].strip() + ";"
     print("####################################################")
-    print("outputs" + outputs[0])
+    print("response" + response)
     print("####################################################")
-
-    return tokenizer.decode(outputs[0].split("```sql")[-1].split("```")[0].split(";")[0].strip() + ";")
+    return response
 
 
 # with gr.Blocks() as server:
