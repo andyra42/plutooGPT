@@ -26,6 +26,7 @@ def ask(message, history, schema):
 
     model_name = "defog/sqlcoder"
     tokenizer = AutoTokenizer.from_pretrained(model_name)
+    print("tokenizer")
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
         trust_remote_code=True,
@@ -38,8 +39,7 @@ def ask(message, history, schema):
     )
     eos_token_id = tokenizer.convert_tokens_to_ids(["```"])[0]
     inputs = tokenizer(prompt, return_tensors="pt").to("cuda")
-
-    inputs = tokenizer(prompt, return_tensors="pt").to("cuda")
+    print("inputs")
     generated_ids = model.generate(
         **inputs,
         num_return_sequences=1,
@@ -49,7 +49,7 @@ def ask(message, history, schema):
         do_sample=False,
         num_beams=5
     )
-
+    print("generate")
     outputs = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
     response = outputs[0].split("```sql")[-1].split("```")[0].split(";")[0].strip() + ";"
     print("####################################################")
