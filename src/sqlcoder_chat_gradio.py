@@ -5,8 +5,24 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
 
-def ask(message, history, schema):
+def load_model(model_name):
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        trust_remote_code=True,
+        # torch_dtype=torch.bfloat16,
+        # load_in_8bit=True,
+        bnb_4bit_compute_dtype=torch.bfloat16,
+        load_in_4bit=True,
+        device_map="auto",
+        use_cache=True,
+    )
+    return model
 
+
+LLM = load_model("defog/sqlcoder")
+
+
+def ask(message, history, schema):
     prompt = """### Instructions:
     Your task is convert a question into a SQL query, given a Postgres database schema.
     Adhere to these rules:
@@ -21,26 +37,26 @@ def ask(message, history, schema):
     Based on your instructions, here is the SQL query I have generated to answer the question `{question}`:
     ```sql
     """.format(question=message, schema=schema)
-    print("Message : "+message)
-    print("prompt"+prompt)
+    print("Message : " + message)
+    print("prompt" + prompt)
 
     model_name = "defog/sqlcoder"
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     print("tokenizer")
-    model = AutoModelForCausalLM.from_pretrained(
-        model_name,
-        trust_remote_code=True,
-        # torch_dtype=torch.bfloat16,
-        # load_in_8bit=True,
-        bnb_4bit_compute_dtype=torch.bfloat16,
-        load_in_4bit=True,
-        device_map="auto",
-        use_cache=True,
-    )
+    # model = AutoModelForCausalLM.from_pretrained(
+    #     model_name,
+    #     trust_remote_code=True,
+    #     # torch_dtype=torch.bfloat16,
+    #     # load_in_8bit=True,
+    #     bnb_4bit_compute_dtype=torch.bfloat16,
+    #     load_in_4bit=True,
+    #     device_map="auto",
+    #     use_cache=True,
+    # )
     eos_token_id = tokenizer.convert_tokens_to_ids(["```"])[0]
     inputs = tokenizer(prompt, return_tensors="pt").to("cuda")
     print("inputs")
-    generated_ids = model.generate(
+    generated_ids = LLM.generate(
         **inputs,
         num_return_sequences=1,
         eos_token_id=eos_token_id,
